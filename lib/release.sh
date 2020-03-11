@@ -41,6 +41,7 @@ debug "SFDX_INSTALL_PACKAGE_VERSION: $SFDX_INSTALL_PACKAGE_VERSION"
 debug "SFDX_CREATE_PACKAGE_VERSION: $SFDX_CREATE_PACKAGE_VERSION"
 debug "SFDX_PACKAGE_NAME: $SFDX_PACKAGE_NAME"
 debug "SFDX_PACKAGE_VERSION_ID: $SFDX_PACKAGE_VERSION_ID"
+debug "MDAPI_DEPLOY_TESTLEVEL: $MDAPI_DEPLOY_TESTLEVEL"
 
 whoami=$(whoami)
 debug "WHOAMI: $whoami"
@@ -121,7 +122,7 @@ if [ ! "$STAGE" == "" ]; then
 
       log "Installing package version $SFDX_PACKAGE_NAME ..."
 
-      invokeCmd "sfdx force:package:install --noprompt --package \"$SFDX_PACKAGE_VERSION_ID\" -u \"$TARGET_SCRATCH_ORG_ALIAS\" --wait 1000 --publishwait 1000"
+      invokeCmd "sfdx force:package:install --noprompt --package \"$SFDX_PACKAGE_VERSION_ID\" -u \"$TARGET_SCRATCH_ORG_ALIAS\" --wait 1000 --publishwait 1000 --upgradetype Delete"
 
     else
 
@@ -147,7 +148,7 @@ if [ ! "$STAGE" == "" ]; then
     then
 
       invokeCmd "sfdx force:source:convert -d mdapiout"
-      invokeCmd "sfdx force:mdapi:deploy -d mdapiout --wait 1000 -u $TARGET_SCRATCH_ORG_ALIAS"
+      invokeCmd "sfdx force:mdapi:deploy -d mdapiout $MDAPI_DEPLOY_TESTLEVEL --wait 1000 -u $TARGET_SCRATCH_ORG_ALIAS"
 
     else
 
